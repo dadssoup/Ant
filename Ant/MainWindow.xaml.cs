@@ -70,8 +70,8 @@ namespace Ant
             };
             var StateNames = new[]
             {
-                new { Name = "Нести листик домой", X = 70, Y = 50 },
-                new { Name = "Искать листик", X = 245, Y = 50 },
+                new { Name = "Искать листик", X = 70, Y = 50 },
+                new { Name = "Нести листик домой", X = 245, Y = 50 },
                 new { Name = "Убегать от курсора", X = 70, Y = 250 },
                 new { Name = "Конец", X = 245, Y = 250 },
             };
@@ -270,12 +270,14 @@ namespace Ant
                     deltaX = 2 * SignOf(antX, pos.X);
                     deltaY = 2 * SignOf(antY, pos.Y);
                     CurrentState.Text = "Улепётывать";
+                    GetSituation(Prikol.Scary);
                 }
                 else
                 {
                     CurrentState.Text = leafCarried ? "Нести лист домой" : "Искать лист";
                     deltaX = 1 * dxdy.X;
                     deltaY = 1 * dxdy.Y;
+                    GetSituation(leafCarried? Prikol.GoLeaf : Prikol.GoHome );
                 }
 
                 antX += deltaX;
@@ -284,7 +286,7 @@ namespace Ant
                 Canvas.SetTop(ant.Rect, antY);
                 ant.Rect.RenderTransform = new RotateTransform(Math.Atan2(deltaY, deltaX) * 180 / Math.PI, ant.Rect.Width / 2, ant.Rect.Height / 2);
             }
-
+            
         }
 
         public bool IsScary()
@@ -338,6 +340,7 @@ namespace Ant
             CompositionTarget.Rendering -= Timer_Tick;
             Reset.IsEnabled = false;
             Start.IsEnabled = true;
+            GetSituation(Prikol.DeadEnd);
         }
 
         public void InitLeaf()
@@ -388,18 +391,18 @@ namespace Ant
             
             foreach (var child in Situation.Children)
             {
-                if(typeof(child) == "Ellipse")
+                if(child.ToString() == "System.Windows.Shapes.Ellipse")
                 {
-                    ((Ellipse)child).Stroke = Brushes.Red;
+                    ((Ellipse)child).Stroke = Brushes.Black;
                 }
             }
             switch
                 (state)
             {
-                case Prikol.GoHome: break;
-                case Prikol.GoLeaf: break;
-                case Prikol.Scary: break;
-                case Prikol.DeadEnd: break;
+                case Prikol.GoHome: Home.Stroke = Brushes.Red; break;
+                case Prikol.GoLeaf: Leafsit.Stroke = Brushes.Red; break;
+                case Prikol.Scary: Scary.Stroke = Brushes.Red; break;
+                case Prikol.DeadEnd: DeadEnd.Stroke = Brushes.Red; break;
                 default: break;
             }
 
