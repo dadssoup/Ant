@@ -63,6 +63,7 @@ namespace Ant
                 Canvas.SetLeft(ant.Rect, antX);
                 antY += deltaY;
                 Canvas.SetTop(ant.Rect, antY);
+                ant.Rect.RenderTransform = new RotateTransform(Math.Atan2(deltaY, deltaX) * 180 / Math.PI, ant.Rect.Width / 2, ant.Rect.Height / 2);
             }
             
         }
